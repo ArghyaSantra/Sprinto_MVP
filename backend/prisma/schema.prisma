@@ -1,0 +1,45 @@
+// Define Database Models
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model User {
+  id        String   @id @default(uuid())
+  name      String
+  email     String   @unique
+  password  String
+  role      Role
+  policies  PolicyAssignment[]
+}
+
+model Policy {
+  id          String   @id @default(uuid())
+  title       String
+  description String
+  status      PolicyStatus
+  assignments PolicyAssignment[]
+}
+
+model PolicyAssignment {
+  id       String @id @default(uuid())
+  userId   String
+  policyId String
+  user     User   @relation(fields: [userId], references: [id])
+  policy   Policy @relation(fields: [policyId], references: [id])
+}
+
+enum Role {
+  ADMIN
+  USER
+}
+
+enum PolicyStatus {
+  DRAFT
+  PUBLISHED
+  ARCHIVED
+}
