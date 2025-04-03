@@ -42,6 +42,8 @@ export const typeDefs = gql`
   type Query {
     users: [User]
     policies: [Policy]
+    policy(id: String!): Policy
+    assignments: [PolicyAssignment!]!
   }
 
   type Mutation {
@@ -63,5 +65,12 @@ export const typeDefs = gql`
       role: Role!
     ): AuthPayload!
     login(email: String!, password: String!): AuthPayload!
+    updatePolicy(
+      id: String!
+      title: String
+      description: String
+      status: PolicyStatus
+    ): Policy
+    deletePolicy(id: String!): String
   }
 `;
